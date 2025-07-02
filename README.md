@@ -16,6 +16,29 @@ A modern inventory and ERP system designed for fashion retailers and small busin
 - 🧠 Clean Codebase, Easy to Customize
 
 ---
+Main Dashboard View
+![image](https://github.com/user-attachments/assets/16402e98-d0bc-4e08-9b3d-de787400cc1e)
+
+Inventory View
+![image](https://github.com/user-attachments/assets/5bcbcd94-4c02-4eab-b5e7-eca4125f262c)
+
+Add Product
+![image](https://github.com/user-attachments/assets/b2a59c90-7626-4639-a1b1-6de640c54322)
+
+
+Sales View which you can Add Product from and export reports 
+![image](https://github.com/user-attachments/assets/a1847f30-ff4a-4418-a21e-c169f76c5307)
+
+New Sale
+![image](https://github.com/user-attachments/assets/16c3eb35-13c4-4b0e-88a4-dcc5b759c1ed)
+
+Accounting View
+![image](https://github.com/user-attachments/assets/8a515d32-5c1d-44ea-8851-97adb8667486)
+![image](https://github.com/user-attachments/assets/cf24d575-1bb1-406f-9a4d-d08585d28b49)
+
+Settings View
+![image](https://github.com/user-attachments/assets/3ab3b6ac-34c1-4456-9a6a-9201e5103662)
+![image](https://github.com/user-attachments/assets/f75ec89e-951d-4030-a104-1ad970efe4cc)
 
 
 
