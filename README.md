@@ -16,7 +16,7 @@ A modern inventory and ERP system designed for fashion retailers and small busin
 - 🧠 Clean Codebase, Easy to Customize
 
 ---
-Main Dashboard View
+ Main Dashboard View
 ![image](https://github.com/user-attachments/assets/16402e98-d0bc-4e08-9b3d-de787400cc1e)
 
 Inventory View
@@ -50,11 +50,11 @@ Settings View
 
 ## ⚙️ Tech Stack
 
-- **Backend:** Django (Python)
+- **Backend:** Django (Python) 3
 - **Frontend:** Tailwind CSS, HTML5, JavaScript
 - **Charts:** Chart.js
 - **Database:** SQLite (default, swappable)
-- **UI:** Responsive, dark/light-ready, sleek ✨
+- **UI:** Responsive, light-ready, sleek ✨ Dark to come soon!
 
 ---
 
