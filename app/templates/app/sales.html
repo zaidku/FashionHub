@@ -1,0 +1,434 @@
+{% extends "app/layout.html" %}
+
+{% block title %}Sales - FashionERP{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Sales Management</h1>
+        <div class="flex space-x-3">
+            <button onclick="openNewSaleModal()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <i class="fas fa-cash-register mr-2"></i>
+                New Sale
+            </button>
+            <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <i class="fas fa-file-export mr-2"></i>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white shadow rounded-lg p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label for="saleStatus" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select id="saleStatus" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Status</option>
+                    <option>Completed</option>
+                    <option>Pending</option>
+                    <option>Refunded</option>
+                </select>
+            </div>
+            <div>
+                <label for="saleDate" class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                <select id="saleDate" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>Today</option>
+                    <option>This Week</option>
+                    <option selected>This Month</option>
+                    <option>This Year</option>
+                    <option>Custom Range</option>
+                </select>
+            </div>
+            <div>
+                <label for="saleCustomer" class="block text-sm font-medium text-gray-700 mb-1">Customer</label>
+                <select id="saleCustomer" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Customers</option>
+                    <option>Retail</option>
+                    <option>Wholesale</option>
+                </select>
+            </div>
+            <div>
+                <label for="salePayment" class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                <select id="salePayment" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option>All Methods</option>
+                    <option>Cash</option>
+                    <option>Credit Card</option>
+                    <option>Bank Transfer</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Table -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h2 class="text-lg font-medium text-gray-900">Sales Transactions</h2>
+            <div class="relative max-w-xs w-full">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <input class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Search sales..." type="search">
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice #</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-indigo-600">#INV-2023-0567</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Jul 15, 2023</div>
+                            <div class="text-sm text-gray-500">10:45 AM</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Retail Customer</div>
+                            <div class="text-sm text-gray-500">Walk-in</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">3 items</div>
+                            <div class="text-sm text-gray-500">Men's T-Shirt, Women's Jeans</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Credit Card</div>
+                            <div class="text-sm text-gray-500">Visa •••• 4242</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">$245.50</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-print"></i></button>
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-eye"></i></button>
+                            <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-indigo-600">#INV-2023-0566</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Jul 14, 2023</div>
+                            <div class="text-sm text-gray-500">3:22 PM</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Fashion Boutique LLC</div>
+                            <div class="text-sm text-gray-500">Wholesale</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">15 items</div>
+                            <div class="text-sm text-gray-500">Various sizes and colors</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Bank Transfer</div>
+                            <div class="text-sm text-gray-500">Pending</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">$1,245.75</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-print"></i></button>
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-eye"></i></button>
+                            <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-indigo-600">#INV-2023-0565</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Jul 12, 2023</div>
+                            <div class="text-sm text-gray-500">11:15 AM</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Retail Customer</div>
+                            <div class="text-sm text-gray-500">Walk-in</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">2 items</div>
+                            <div class="text-sm text-gray-500">Women's Dress, Men's Shoes</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Cash</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">$189.99</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-print"></i></button>
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-eye"></i></button>
+                            <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-indigo-600">#INV-2023-0564</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Jul 10, 2023</div>
+                            <div class="text-sm text-gray-500">2:45 PM</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Trendy Styles Inc.</div>
+                            <div class="text-sm text-gray-500">Wholesale</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">8 items</div>
+                            <div class="text-sm text-gray-500">Men's Polo, Women's Skirt</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Credit Card</div>
+                            <div class="text-sm text-gray-500">Mastercard •••• 5555</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">$320.40</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-print"></i></button>
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-eye"></i></button>
+                            <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-indigo-600">#INV-2023-0563</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Jul 8, 2023</div>
+                            <div class="text-sm text-gray-500">5:30 PM</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Retail Customer</div>
+                            <div class="text-sm text-gray-500">Walk-in</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">1 item</div>
+                            <div class="text-sm text-gray-500">Leather Belt</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">Cash</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Refunded</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">$29.99</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-print"></i></button>
+                            <button class="text-indigo-600 hover:text-indigo-900 mr-3"><i class="fas fa-eye"></i></button>
+                            <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <div class="flex-1 flex justify-between sm:hidden">
+                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Previous</a>
+                <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Next</a>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">18</span> results
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Previous</span>
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">3</a>
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Next</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Sale Modal -->
+<div id="newSaleModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <i class="fas fa-cash-register text-indigo-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">New Sale</h3>
+                        <div class="mt-2">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                <div class="md:col-span-2">
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h4 class="text-md font-medium text-gray-900 mb-3">Add Products</h4>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i class="fas fa-search text-gray-400"></i>
+                                            </div>
+                                            <input class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Search products..." type="search">
+                                        </div>
+
+                                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div class="border rounded-md p-3 cursor-pointer hover:bg-gray-100">
+                                                <div class="flex">
+                                                    <img class="h-16 w-16 rounded" src="https://via.placeholder.com/150" alt="Product">
+                                                    <div class="ml-3">
+                                                        <div class="text-sm font-medium text-gray-900">Men's Classic T-Shirt</div>
+                                                        <div class="text-sm text-gray-500">Black, Size M</div>
+                                                        <div class="text-sm font-medium text-indigo-600 mt-1">$24.99</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="border rounded-md p-3 cursor-pointer hover:bg-gray-100">
+                                                <div class="flex">
+                                                    <img class="h-16 w-16 rounded" src="https://via.placeholder.com/150" alt="Product">
+                                                    <div class="ml-3">
+                                                        <div class="text-sm font-medium text-gray-900">Women's Slim Jeans</div>
+                                                        <div class="text-sm text-gray-500">Blue, Size S</div>
+                                                        <div class="text-sm font-medium text-indigo-600 mt-1">$59.99</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="border rounded-md p-3 cursor-pointer hover:bg-gray-100">
+                                                <div class="flex">
+                                                    <img class="h-16 w-16 rounded" src="https://via.placeholder.com/150" alt="Product">
+                                                    <div class="ml-3">
+                                                        <div class="text-sm font-medium text-gray-900">Summer Floral Dress</div>
+                                                        <div class="text-sm text-gray-500">Pink, Size M</div>
+                                                        <div class="text-sm font-medium text-indigo-600 mt-1">$45.99</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="border rounded-md p-3 cursor-pointer hover:bg-gray-100">
+                                                <div class="flex">
+                                                    <img class="h-16 w-16 rounded" src="https://via.placeholder.com/150" alt="Product">
+                                                    <div class="ml-3">
+                                                        <div class="text-sm font-medium text-gray-900">Unisex Sneakers</div>
+                                                        <div class="text-sm text-gray-500">White, Size 9</div>
+                                                        <div class="text-sm font-medium text-indigo-600 mt-1">$79.99</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="bg-gray-50 p-4 rounded-lg h-full">
+                                        <h4 class="text-md font-medium text-gray-900 mb-3">Order Summary</h4>
+
+                                        <div class="space-y-3 mb-4">
+                                            <div class="flex justify-between">
+                                                <div class="flex items-center">
+                                                    <span class="text-sm text-gray-900">Men's Classic T-Shirt</span>
+                                                    <span class="text-xs text-gray-500 ml-2">×1</span>
+                                                </div>
+                                                <span class="text-sm text-gray-900">$24.99</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <div class="flex items-center">
+                                                    <span class="text-sm text-gray-900">Women's Slim Jeans</span>
+                                                    <span class="text-xs text-gray-500 ml-2">×1</span>
+                                                </div>
+                                                <span class="text-sm text-gray-900">$59.99</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="border-t border-gray-200 pt-3 space-y-2">
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-gray-600">Subtotal</span>
+                                                <span class="text-sm text-gray-900">$84.98</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-gray-600">Tax (8.25%)</span>
+                                                <span class="text-sm text-gray-900">$7.01</span>
+                                            </div>
+                                            <div class="flex justify-between font-medium border-t border-gray-200 pt-2">
+                                                <span class="text-sm text-gray-900">Total</span>
+                                                <span class="text-sm text-gray-900">$91.99</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <label for="paymentMethod" class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                                            <select id="paymentMethod" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                                <option>Cash</option>
+                                                <option>Credit Card</option>
+                                                <option>Bank Transfer</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <label for="customerNotes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                                            <textarea id="customerNotes" rows="2" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"></textarea>
+                                        </div>
+
+                                        <button class="mt-4 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">Complete Sale ($91.99)</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">Save Sale</button>
+                <button type="button" onclick="closeNewSaleModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Modal functions
+    function openNewSaleModal() {
+        document.getElementById('newSaleModal').classList.remove('hidden');
+    }
+
+    function closeNewSaleModal() {
+        document.getElementById('newSaleModal').classList.add('hidden');
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById('newSaleModal');
+        if (event.target === modal) {
+            closeNewSaleModal();
+        }
+    });
+</script>
+{% endblock %}

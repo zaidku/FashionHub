@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FashionERP{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-item:hover .sidebar-tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .sidebar-tooltip {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="h-full font-sans">
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-gradient-to-b from-indigo-900 to-indigo-800">
+                <div class="flex items-center h-16 px-4 border-b border-indigo-700">
+                    <div class="flex items-center">
+                        <i class="fas fa-tshirt text-white text-2xl mr-2"></i>
+                        <span class="text-white font-bold text-xl">FashionERP</span>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                    <nav class="flex-1 space-y-2">
+                        <a href="{% url 'dashboard' %}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white group sidebar-item">
+                            <i class="fas fa-tachometer-alt mr-3 text-indigo-300 group-hover:text-white"></i>
+                            <span>Dashboard</span>
+                            <span class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">Dashboard</span>
+                        </a>
+                        <a href="{% url 'inventory' %}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white group sidebar-item">
+                            <i class="fas fa-boxes mr-3 text-indigo-300 group-hover:text-white"></i>
+                            <span>Inventory</span>
+                            <span class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">Inventory</span>
+                        </a>
+                        <a href="{% url 'sales' %}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white group sidebar-item">
+                            <i class="fas fa-shopping-cart mr-3 text-indigo-300 group-hover:text-white"></i>
+                            <span>Sales</span>
+                            <span class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">Sales</span>
+                        </a>
+                        <a href="{% url 'accounting' %}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white group sidebar-item">
+                            <i class="fas fa-file-invoice-dollar mr-3 text-indigo-300 group-hover:text-white"></i>
+                            <span>Accounting</span>
+                            <span class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">Accounting</span>
+                        </a>
+                        <a href="{% url 'settings' %}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white group sidebar-item">
+                            <i class="fas fa-cog mr-3 text-indigo-300 group-hover:text-white"></i>
+                            <span>Settings</span>
+                            <span class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">Settings</span>
+                        </a>
+                    </nav>
+                </div>
+                <div class="p-4 border-t border-indigo-700">
+                    <div class="flex items-center">
+                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-white">John Doe</p>
+                            <p class="text-xs font-medium text-indigo-200 group-hover:text-white">Admin</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile sidebar -->
+        <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+            <div class="flex justify-around py-2">
+                <a href="{% url 'dashboard' %}" class="flex flex-col items-center px-2 py-1 text-xs font-medium text-gray-500 hover:text-indigo-600">
+                    <i class="fas fa-tachometer-alt mb-1"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'inventory' %}" class="flex flex-col items-center px-2 py-1 text-xs font-medium text-gray-500 hover:text-indigo-600">
+                    <i class="fas fa-boxes mb-1"></i>
+                    <span>Inventory</span>
+                </a>
+                <a href="{% url 'sales' %}" class="flex flex-col items-center px-2 py-1 text-xs font-medium text-gray-500 hover:text-indigo-600">
+                    <i class="fas fa-shopping-cart mb-1"></i>
+                    <span>Sales</span>
+                </a>
+                <a href="{% url 'accounting' %}" class="flex flex-col items-center px-2 py-1 text-xs font-medium text-gray-500 hover:text-indigo-600">
+                    <i class="fas fa-file-invoice-dollar mb-1"></i>
+                    <span>Accounting</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top navigation -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+                    <div class="flex-1 flex items-center">
+                        <button class="md:hidden mr-2 text-gray-500 focus:outline-none">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <!-- Search bar -->
+                        <div class="relative max-w-md w-full">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Search..." type="search">
+                        </div>
+                    </div>
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <div class="ml-3 relative">
+                            <div>
+                                <button class="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="user-menu">
+                                    <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main content area -->
+            <main class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Primary Button Component -->
+    <template id="primary-button">
+        <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <i class="fas fa-plus mr-2"></i>
+            <span class="button-text">Button</span>
+        </button>
+    </template>
+
+    <!-- Secondary Button Component -->
+    <template id="secondary-button">
+        <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <i class="fas fa-edit mr-2"></i>
+            <span class="button-text">Button</span>
+        </button>
+    </template>
+
+    <!-- Danger Button Component -->
+    <template id="danger-button">
+        <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+            <i class="fas fa-trash mr-2"></i>
+            <span class="button-text">Button</span>
+        </button>
+    </template>
+
+    <script>
+        // Dynamic button creation
+        function createButton(type, text, icon = null) {
+            let template;
+            if (type === 'primary') {
+                template = document.getElementById('primary-button').content.cloneNode(true);
+            } else if (type === 'secondary') {
+                template = document.getElementById('secondary-button').content.cloneNode(true);
+            } else if (type === 'danger') {
+                template = document.getElementById('danger-button').content.cloneNode(true);
+            }
+
+            const button = template.querySelector('button');
+            const buttonText = button.querySelector('.button-text');
+            buttonText.textContent = text;
+
+            if (icon) {
+                const iconElement = button.querySelector('i');
+                iconElement.className = `fas fa-${icon} mr-2`;
+            }
+
+            return button;
+        }
+
+        // Example usage:
+        // document.body.appendChild(createButton('primary', 'Add Product', 'plus'));
+
+        // Mobile menu toggle
+        document.querySelector('.md\\:hidden button').addEventListener('click', function () {
+            const sidebar = document.querySelector('.hidden.md\\:flex');
+            sidebar.classList.toggle('hidden');
+        });
+
+        // Tooltip initialization
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('mouseenter', function () {
+                this.querySelector('.sidebar-tooltip').classList.add('opacity-100', 'translate-x-0');
+            });
+            item.addEventListener('mouseleave', function () {
+                this.querySelector('.sidebar-tooltip').classList.remove('opacity-100', 'translate-x-0');
+            });
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Ignore Python virtual environment
+env/
+.venv/
+
+# Ignore VS & OS junk
+.vs/
+__pycache__/
+*.py[cod]
+*.log
+*.sqlite3
+*.suo
+*.user
+*.db
+*.DS_Store
+
+# Ignore media and secret stuff
+media/
+.env
