@@ -17,8 +17,6 @@ A modern inventory and ERP system designed for fashion retailers and small busin
 
 ---
 
-## 💻 Screenshots
-
 
 
 - 📸 Dashboard with sales, charts, and stats
@@ -40,4 +38,61 @@ A modern inventory and ERP system designed for fashion retailers and small busin
 ## 📦 Installation
 
 ```bash
-# 1. Clone th
+# 1. Clone the repo
+git clone https://github.com/zaidku/FashionHub.git
+cd FashionHub
+
+# 2. Create virtual environment
+python -m venv env
+source env/bin/activate  # Windows: env\Scripts\activate
+
+# 3. Install requirements
+pip install -r requirements.txt
+
+# 4. Apply migrations
+python manage.py migrate
+
+# 5. Create superuser
+python manage.py createsuperuser
+
+# 6. Run the server
+python manage.py runserver
+
+
+🔑 Demo Login
+Username: admin
+Password: admin123
+
+
+📁 Project Structure
+FashionHub/
+├── app/
+│   ├── templates/
+│   ├── static/
+│   ├── models.py
+│   ├── views.py
+│   ├── forms.py
+├── FashionHub/
+│   ├── settings.py
+│   ├── urls.py
+├── manage.py
+├── requirements.txt
+└── README.md
+
+
+🧠 Ideas for Next Version
+ PDF export for invoices
+
+ Low stock SMS alerts
+
+ Multi-user support (admin/staff roles)
+
+ REST API for mobile apps
+
+ Barcode scanner support
+
+
+
+📄 License
+MIT — Free to use, modify, and distribute.
+Crafted with ❤️ by @zaidku
