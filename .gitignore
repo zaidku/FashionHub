@@ -1,18 +1,41 @@
-# Ignore Python virtual environment
+﻿# 🐍 Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# 📦 Virtual environments
 env/
 .venv/
 
-# Ignore VS & OS junk
-.vs/
-__pycache__/
-*.py[cod]
-*.log
+# 🔒 Secrets & sensitive files
+.env
+*.secret
+
+# 🗃️ Database
 *.sqlite3
+*.db
+
+# 🖼️ Uploaded media
+/media/
+
+# 📂 Static and build files (optional if collected)
+staticfiles/
+static/
+
+# 💻 Visual Studio / VS Code settings
+.vs/
 *.suo
 *.user
-*.db
-*.DS_Store
+*.userosscache
+*.sln.docstates
+.vscode/
 
-# Ignore media and secret stuff
-media/
-.env
+# 🍏 macOS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# 🪟 Windows junk
+Thumbs.db
+ehthumbs.db
