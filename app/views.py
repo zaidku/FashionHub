@@ -3,10 +3,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.db.models import Sum, Count, Avg
 from django.utils import timezone
-from .models import Product, Sale, SaleItem, Category
+from .models import Product, Sale, SaleItem
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models.functions import TruncMonth
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import Product, ProductImage
+from django.http import JsonResponse
 
 
 
@@ -92,7 +96,7 @@ def dashboard(request):
         sales_data.append(total)
     
     # Product category distribution
-    categories = Product.objects.values('category__name').annotate(total=Count('id')).order_by('-total')[:5]
+    #categories = Product.objects.values('category').annotate(total=Count('id')).order_by('-total')[:5]
     
     return render(request, 'app/dashboard.html', {
         'title': 'Dashboard',
@@ -111,9 +115,9 @@ def dashboard(request):
         'out_of_stock_count': out_of_stock_count,
         'recent_sales': recent_sales,
         'low_stock_items': low_stock_items,
-        'categories': categories,
-        'category_labels': [c['category__name'] for c in categories],
-        'category_data': [c['total'] for c in categories],
+       # 'categories': categories,
+       # 'category_labels': [c['category'] for c in categories],
+       #'category_data': [c['total'] for c in categories],
 
     })
 
@@ -121,11 +125,11 @@ def dashboard(request):
 
 def inventory(request):
     products = Product.objects.all().order_by('-created_at')
-    categories = Category.objects.all()
+    #categories = Category.objects.all()
     
     return render(request, 'app/inventory.html', {
         'products': products,
-        'categories': categories,
+        #'categories': categories,
         'title': 'Inventory Management'
     })
 
@@ -181,22 +185,52 @@ def settings(request):
 
 from .forms import ProductForm
 # Add Product Function
+from django.http import JsonResponse
+
+@csrf_exempt  # remove this when CSRF setup is fully working
 def add_product(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                product = form.save()
-                messages.success(request, f'Product "{product.name}" added successfully!')
-                return redirect('inventory')
-            except Exception as e:
-                messages.error(request, f'Error saving product: {str(e)}')
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = ProductForm()
-    
-    return render(request, 'app/add_product.html', {
-        'form': form,
-        'title': 'Add Product'
-    })
+        try:
+            # Get all product fields
+            name = request.POST.get('productName')
+            price = request.POST.get('productPrice')
+            cost_price = request.POST.get('productCost')
+            size = request.POST.get('productSize')
+            color = request.POST.get('productColor')
+            quantity = request.POST.get('productQuantity')
+            shipping_cost = request.POST.get('productShipping')
+            description = request.POST.get('productDescription')
+            primary_index = int(request.POST.get('primaryImageIndex', 0))  # default to first image if not set
+
+            # Create the product object
+            product = Product(
+                name=name,
+                price=price,
+                cost_price=cost_price,
+                size=size,
+                color=color,
+                quantity=quantity,
+                shipping_cost=shipping_cost,
+                description=description
+            )
+            product.save()
+
+            # Handle up to 10 uploaded images
+            image_files = request.FILES.getlist('productImages')
+            if len(image_files) > 10:
+                return JsonResponse({'success': False, 'message': 'Maximum 10 images allowed.'})
+
+            for index, image_file in enumerate(image_files):
+                is_primary = index == primary_index
+                ProductImage.objects.create(
+                    product=product,
+                    image=image_file,
+                    is_primary=is_primary
+                )
+
+            return JsonResponse({'success': True, 'message': 'Product added with images!'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request'})

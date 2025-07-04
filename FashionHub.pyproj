@@ -45,6 +45,14 @@
     <Compile Include="FashionHub\settings.py" />
     <Compile Include="FashionHub\urls.py" />
     <Compile Include="FashionHub\wsgi.py" />
+    <Compile Include="storefront\admin.py" />
+    <Compile Include="storefront\apps.py" />
+    <Compile Include="storefront\migrations\__init__.py" />
+    <Compile Include="storefront\models.py" />
+    <Compile Include="storefront\tests.py" />
+    <Compile Include="storefront\urls.py" />
+    <Compile Include="storefront\views.py" />
+    <Compile Include="storefront\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
@@ -58,14 +66,20 @@
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="FashionHub\" />
+    <Folder Include="storefront\" />
+    <Folder Include="storefront\migrations\" />
+    <Folder Include="storefront\templates\" />
+    <Folder Include="storefront\templates\storefront\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="app\templates\app\accounting.html" />
     <Content Include="app\templates\app\dashboard.html" />
     <Content Include="app\templates\app\inventory.html" />
+    <Content Include="app\templates\app\orders.html" />
     <Content Include="app\templates\app\sales.html" />
     <Content Include="app\templates\app\settings.html" />
+    <Content Include="app\admin.py" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
@@ -96,6 +110,12 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="storefront\templates\storefront\cart.html" />
+    <Content Include="storefront\templates\storefront\home.html" />
+    <Content Include="storefront\templates\storefront\index.html" />
+    <Content Include="storefront\templates\storefront\product_detail.html" />
+    <Content Include="storefront\templates\storefront\product_list.html" />
+    <Content Include="storefront\templates\storefront\thank_you.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">

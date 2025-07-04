@@ -1,0 +1,20 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Welcome to the Store</h1>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {% for product in products %}
+    <div class="border p-4 rounded shadow">
+        <a href="{% url 'storefront:product_detail' product.slug %}">
+            {% if product.images.all %}
+            <img src="{{ product.images.first.image.url }}" class="w-full h-48 object-cover mb-2" />
+            {% else %}
+            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">No Image</div>
+            {% endif %}
+            <h2 class="font-semibold">{{ product.name }}</h2>
+            <p>${{ product.price }}</p>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

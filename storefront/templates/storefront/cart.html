@@ -1,0 +1,83 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10">
+    <h2 class="text-2xl font-bold mb-6">Your Cart</h2>
+
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="px-4 py-2 rounded {% if message.tags == 'error' %}bg-red-100 text-red-800{% else %}bg-green-100 text-green-800{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if cart_items %}
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="border-b">
+                    <th class="pb-2">Product</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr class="border-b">
+                    <td class="py-4">
+                        <div class="flex items-center">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded mr-4">
+                            {% endif %}
+                            <div>
+                                <h3 class="font-medium">{{ item.product.name }}</h3>
+                                <form action="{% url 'storefront:remove_from_cart' item.product.slug %}" method="post" class="mt-1">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-red-500 text-sm hover:text-red-700">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <form action="{% url 'storefront:update_cart' item.product.slug %}" method="post" class="flex items-center">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="w-16 px-2 py-1 border rounded">
+                            <button type="submit" class="ml-2 text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td>${{ item.product.price|floatformat:2 }}</td>
+                    <td>${{ item.subtotal|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-6 text-right">
+        <p class="text-xl font-semibold">Total: ${{ total|floatformat:2 }}</p>
+        <div class="mt-4 space-x-4">
+            <a href="{% url 'storefront:product_list' %}" class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                Continue Shopping
+            </a>
+            <a href="{% url 'storefront:checkout' %}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                Proceed to Checkout
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-10">
+        <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+        <p class="text-lg text-gray-600">Your cart is empty</p>
+        <a href="{% url 'storefront:product_list' %}" class="mt-4 inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+            Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
