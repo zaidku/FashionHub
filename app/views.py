@@ -148,6 +148,12 @@ def sales(request):
         }
     )
 
+def order_list(request):
+    orders = Sale.objects.select_related('customer').prefetch_related('items__product').order_by('-date')
+    return render(request, 'app/orders.html', {'orders': orders})
+
+
+
 
 
 def accounting(request):

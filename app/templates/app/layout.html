@@ -69,6 +69,13 @@
                             <span>Storefront</span>
                             <span class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">Storefront</span>
                         </a>
+
+                        <a href="{% url 'order_list' %}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white group sidebar-item">
+                            <i class="fas fa-clipboard-list mr-3 text-indigo-300 group-hover:text-white"></i>
+                            <span>Orders</span>
+                            <span class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">Orders</span>
+                        </a>
+
                         <a href="{% url 'inventory' %}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white group sidebar-item">
                             <i class="fas fa-boxes mr-3 text-indigo-300 group-hover:text-white"></i>
                             <span>Inventory</span>
@@ -114,6 +121,11 @@
                     <i class="fas fa-shopping-cart mb-1"></i>
                     <span>Store</span>
                 </a>
+                <a href="{% url 'order_list' %}" class="flex flex-col items-center px-2 py-1 text-xs font-medium text-gray-500 hover:text-indigo-600">
+                    <i class="fas fa-clipboard-list mb-1"></i>
+                    <span>Orders</span>
+                </a>
+
                 <a href="{% url 'inventory' %}" class="flex flex-col items-center px-2 py-1 text-xs font-medium text-gray-500 hover:text-indigo-600">
                     <i class="fas fa-boxes mb-1"></i>
                     <span>Inventory</span>
@@ -126,6 +138,7 @@
                     <i class="fas fa-file-invoice-dollar mb-1"></i>
                     <span>Accounting</span>
                 </a>
+
             </div>
         </div>
 

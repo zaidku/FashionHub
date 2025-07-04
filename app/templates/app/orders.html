@@ -1,11 +1,36 @@
-<!DOCTYPE html>
+{% extends 'app/layout.html' %}
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+{% block content %}
+<div class="max-w-6xl mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-6">🧾 Orders</h1>
 
-</body>
-</html>
+    {% for order in orders %}
+    <div class="border p-4 mb-4 rounded shadow-sm">
+        <h2 class="text-xl font-semibold">Invoice #{{ order.invoice_number }}</h2>
+
+        <p>
+            Customer:
+            {% if order.customer %}
+            {{ order.customer.name }}
+            {% else %}
+            Guest
+            {% endif %}
+        </p>
+
+        <p>Date: {{ order.date }}</p>
+        <p>Payment Method: {{ order.get_payment_method_display }}</p>
+        <p>Total: ${{ order.total }}</p>
+
+        <h3 class="mt-4 font-semibold">Items:</h3>
+        <ul class="list-disc pl-6">
+            {% for item in order.items.all %}
+            <li>{{ item.quantity }}x {{ item.product.name }} — ${{ item.total_price }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% empty %}
+    <p>No orders found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

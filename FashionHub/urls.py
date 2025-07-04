@@ -17,7 +17,7 @@ urlpatterns = [
     path('accounting/', views.accounting, name='accounting'),
     path('settings/', views.settings, name='settings'),
     path('inventory/add/', views.add_product, name='add_product'),
-
+    path('orders/', views.order_list, name='order_list'),
 
     # Store Front URLs
     path('store/', include(('storefront.urls', 'storefront'), namespace='storefront')),

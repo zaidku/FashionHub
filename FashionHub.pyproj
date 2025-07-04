@@ -72,6 +72,7 @@
     <Folder Include="storefront\templates\storefront\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".env" />
     <Content Include=".gitignore" />
     <Content Include="app\templates\app\accounting.html" />
     <Content Include="app\templates\app\dashboard.html" />
